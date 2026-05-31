@@ -1,6 +1,6 @@
-# Aws-Music-Mood # AI Mood Music Recommendation System 🎵
+ Aws-Music-Mood  AI Mood Music Recommendation System 
 
-## Overview
+ Overview
 
 The AI Mood Music Recommendation System is a cloud-based application that analyzes a user's emotions from text input and recommends music based on the detected mood. The project combines Natural Language Processing (NLP), sentiment analysis, and personalized recommendation logic to create an interactive music discovery experience.
 
@@ -8,7 +8,7 @@ The application is deployed on Amazon Web Services (AWS) using Elastic Beanstalk
 
 ---
 
-## Features
+ Features
 
 * Mood detection from user text input
 * Sentiment analysis using NLP techniques
