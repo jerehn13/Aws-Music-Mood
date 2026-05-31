@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+mood_model.joblib
+desktop.ini
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
