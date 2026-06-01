@@ -104,7 +104,7 @@ Deployment Steps:
 
 
 ### Recommendation Results
-<img width="739" height="452" alt="image" src="https://github.com/user-attachments/assets/cb66da06-3fb3-4d62-8261-16a38ca14b00" />
+<img width="725" height="452" alt="image" src="https://github.com/user-attachments/assets/6ef28dd8-1655-4740-a7ed-6ecb1077e4e8" />
 
 
 
