@@ -69,7 +69,7 @@ PAGE = """<!DOCTYPE html>
 
     /* iPod mini */
     .cd {{
-      width: 170px; margin-top: 56px; padding: 14px 14px 10px;
+      width: 170px; padding: 14px 14px 10px;
       background: linear-gradient(#dfe2e8, #c7ccd4);
       border: 4px solid #b0b5bf; border-radius: 26px;
       box-shadow: 0 6px 0 #aab0ba, 0 16px 22px rgba(0,0,0,0.25);
