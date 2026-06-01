@@ -62,44 +62,68 @@ PAGE = """<!DOCTYPE html>
 
     .player-layout {{ display: flex; gap: 26px; align-items: flex-start; flex-wrap: wrap; }}
     .cd-side {{
-      flex: 0 0 200px; display: flex; flex-direction: column; align-items: center;
+      flex: 0 0 210px; display: flex; flex-direction: column; align-items: center;
       position: sticky; top: 20px;
     }}
     .song-list {{ flex: 1; min-width: 240px; }}
 
-    /* iPod mini */
+    /* Classic iPod */
     .cd {{
-      width: 170px; padding: 14px 14px 10px;
-      background: linear-gradient(#dfe2e8, #c7ccd4);
-      border: 4px solid #b0b5bf; border-radius: 26px;
-      box-shadow: 0 6px 0 #aab0ba, 0 16px 22px rgba(0,0,0,0.25);
+      width: 188px; padding: 16px 16px 18px;
+      background: #dcdee2;
+      border: 1px solid #bcbfc5; border-radius: 24px;
       position: relative; transition: transform 0.1s;
     }}
     .cd .screen {{
-      width: 100%; aspect-ratio: 1 / 1; border-radius: 8px;
-      background: #1f2430; border: 3px solid #9aa0ab; overflow: hidden;
-      position: relative; display: flex; align-items: center; justify-content: center;
+      width: 100%; aspect-ratio: 4 / 3; border-radius: 4px; overflow: hidden;
+      background: #fff; border: 1px solid #9aa1ad;
+      display: flex; flex-direction: column;
+      font-family: Helvetica, Arial, sans-serif;
     }}
-    .cd .screen img {{
-      width: 100%; height: 100%; object-fit: cover; display: none;
+    .cd .statusbar {{
+      display: flex; align-items: center;
+      padding: 2px 6px; font-size: 10px; font-weight: 700; color: #2b2f3a;
+      background: #d6dae0; border-bottom: 1px solid #aab0b8;
     }}
-    .cd .screen.has-art img {{ display: block; }}
-    .cd .screen .ph {{
-      color: #8a8f99; font-size: 11px; text-align: center; padding: 8px; line-height: 1.4;
+    .cd .ui {{ display: flex; flex: 1; min-height: 0; }}
+    .cd .mlist {{
+      list-style: none; margin: 0; padding: 0; flex: 1;
+      background: #fff; font-size: 9px; color: #1c1c1c; overflow: hidden;
     }}
-    .cd .screen.has-art .ph {{ display: none; }}
+    .cd .mlist li {{
+      padding: 2px 6px; display: flex; justify-content: space-between;
+      border-bottom: 1px solid #eef0f3; white-space: nowrap;
+    }}
+    .cd .mlist li.sel {{
+      background: #3f6fc4; color: #fff; font-weight: 700;
+    }}
+    .cd .art {{
+      flex: 0 0 46%; position: relative; background: #1b1b1b;
+      display: flex; align-items: center; justify-content: center;
+      border-left: 1px solid #9aa1ad;
+    }}
+    .cd .art img {{ width: 100%; height: 100%; object-fit: cover; display: none; }}
+    .cd .screen.has-art .art img {{ display: block; }}
+    .cd .art .ph {{
+      color: #8a8f99; font-size: 9px; text-align: center; padding: 4px; line-height: 1.3;
+    }}
+    .cd .screen.has-art .art .ph {{ display: none; }}
     .cd .wheel {{
-      width: 96px; height: 96px; border-radius: 50%; margin: 14px auto 2px;
-      background: radial-gradient(circle at 50% 40%, #f3f5f8, #dfe2e8);
-      border: 3px solid #b0b5bf; position: relative;
+      width: 120px; height: 120px; border-radius: 50%; margin: 16px auto 0;
+      background: #e8e9ec; border: 1px solid #c4c7cd;
+      position: relative; color: #7a7f87; font-size: 10px; font-weight: 700;
+      user-select: none;
     }}
-    .cd .wheel::after {{
-      content: ""; position: absolute; top: 50%; left: 50%;
-      width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%;
-      background: #cfd4dc; border: 3px solid #b0b5bf;
+    .cd .wheel .lbl {{ position: absolute; left: 50%; transform: translateX(-50%); }}
+    .cd .wheel .lbl.menu {{ top: 8px; }}
+    .cd .wheel .lbl.play {{ bottom: 8px; font-size: 13px; }}
+    .cd .wheel .lbl.prev {{ left: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; }}
+    .cd .wheel .lbl.next {{ right: 12px; left: auto; top: 50%; transform: translateY(-50%); font-size: 13px; }}
+    .cd .wheel .center {{
+      position: absolute; top: 50%; left: 50%; width: 46px; height: 46px;
+      margin: -23px 0 0 -23px; border-radius: 50%;
+      background: #dcdee2; border: 1px solid #c0c3c9;
     }}
-    .cd.playing .wheel {{ animation: spin 3s linear infinite; }}
-    @keyframes spin {{ from {{ transform: rotate(0); }} to {{ transform: rotate(360deg); }} }}
     @keyframes bump {{
       0% {{ transform: scale(1); }}
       45% {{ transform: scale(1.035); }}
@@ -514,10 +538,29 @@ RESULT = """<div class="result">
     <div class="cd-side">
       <div class="cd" id="cd">
         <div class="screen" id="screen">
-          <div class="ph">No song playing</div>
-          <img id="albumArt" alt="">
+          <div class="statusbar"><span>iPod</span></div>
+          <div class="ui">
+            <ul class="mlist">
+              <li class="sel"><span>Music</span><span>&#8250;</span></li>
+              <li><span>Videos</span></li>
+              <li><span>Photos</span></li>
+              <li><span>Podcasts</span></li>
+              <li><span>Settings</span></li>
+              <li><span>Shuffle Songs</span></li>
+            </ul>
+            <div class="art">
+              <div class="ph">No song<br>playing</div>
+              <img id="albumArt" alt="">
+            </div>
+          </div>
         </div>
-        <div class="wheel"></div>
+        <div class="wheel">
+          <span class="lbl menu">MENU</span>
+          <span class="lbl prev">&#9198;</span>
+          <span class="lbl next">&#9197;</span>
+          <span class="lbl play">&#9199;</span>
+          <div class="center"></div>
+        </div>
       </div>
       <div class="now-playing" id="nowPlaying"></div>
       <div class="eq" id="eq"><span></span><span></span><span></span><span></span><span></span></div>
