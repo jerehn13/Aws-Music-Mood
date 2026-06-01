@@ -104,16 +104,13 @@ Deployment Steps:
 ### Mood Input
 <img width="825" height="412" alt="image" src="https://github.com/user-attachments/assets/1ad0b7e9-809f-45da-bcba-f370b43adb82" />
 
-(Add screenshot here)
 
 ### Recommendation Results
 <img width="723" height="481" alt="image" src="https://github.com/user-attachments/assets/e40b2590-ec55-4e53-ae9f-d8a88139810c" />
 
-(Add screenshot here)
 
 ### AWS Deployment
 
-(Add screenshot here)
 
 ---
 
