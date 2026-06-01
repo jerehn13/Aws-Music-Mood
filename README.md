@@ -99,8 +99,6 @@ Deployment Steps:
 ### Home Page
 <img width="1444" height="666" alt="image" src="https://github.com/user-attachments/assets/0117d24f-2723-42f3-9897-ab389ccd7c0e" />
 
-(Add screenshot here)
-
 ### Mood Input
 <img width="825" height="412" alt="image" src="https://github.com/user-attachments/assets/1ad0b7e9-809f-45da-bcba-f370b43adb82" />
 
