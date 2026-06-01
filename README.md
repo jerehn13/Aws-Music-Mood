@@ -102,12 +102,12 @@ Deployment Steps:
 (Add screenshot here)
 
 ### Mood Input
-<img width="746" height="598" alt="image" src="https://github.com/user-attachments/assets/c38024c4-7ba0-45ad-93ee-8f3b15811d60" />
-
+<img width="825" height="412" alt="image" src="https://github.com/user-attachments/assets/1ad0b7e9-809f-45da-bcba-f370b43adb82" />
 
 (Add screenshot here)
 
 ### Recommendation Results
+<img width="723" height="481" alt="image" src="https://github.com/user-attachments/assets/e40b2590-ec55-4e53-ae9f-d8a88139810c" />
 
 (Add screenshot here)
 
