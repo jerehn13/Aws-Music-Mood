@@ -216,3 +216,11 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project-specific generated/artifact files
+desktop.ini
+*.joblib
+.elasticbeanstalk/app_versions/
+
+# Claude Code local settings (personal, not shared)
+.claude/settings.local.json

@@ -75,15 +75,6 @@ PAGE = """<!DOCTYPE html>
       box-shadow: 0 6px 0 #aab0ba, 0 16px 22px rgba(0,0,0,0.25);
       position: relative; transition: transform 0.1s;
     }}
-    .cd .cord {{
-      position: absolute; top: -58px; left: 50%; transform: translateX(-50%);
-      pointer-events: none; transform-origin: bottom center;
-    }}
-    .cd.playing .cord {{ animation: sway 3s ease-in-out infinite; }}
-    @keyframes sway {{
-      0%, 100% {{ transform: translateX(-50%) rotate(-2deg); }}
-      50% {{ transform: translateX(-50%) rotate(2deg); }}
-    }}
     .cd .screen {{
       width: 100%; aspect-ratio: 1 / 1; border-radius: 8px;
       background: #1f2430; border: 3px solid #9aa0ab; overflow: hidden;
@@ -424,12 +415,6 @@ RESULT = """<div class="result">
   <div class="player-layout">
     <div class="cd-side">
       <div class="cd" id="cd">
-        <svg class="cord" viewBox="0 0 140 60" width="140" height="60">
-          <path d="M70 60 C 70 28, 32 34, 25 12" stroke="#cfd4dc" stroke-width="3" fill="none"/>
-          <path d="M70 60 C 70 28, 108 34, 115 12" stroke="#cfd4dc" stroke-width="3" fill="none"/>
-          <circle cx="25" cy="9" r="6" fill="#f3f5f8" stroke="#b0b5bf" stroke-width="2"/>
-          <circle cx="115" cy="9" r="6" fill="#f3f5f8" stroke="#b0b5bf" stroke-width="2"/>
-        </svg>
         <div class="screen" id="screen">
           <div class="ph">No song playing</div>
           <img id="albumArt" alt="">
