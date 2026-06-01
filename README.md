@@ -97,6 +97,7 @@ Deployment Steps:
 ## Screenshots
 
 ### Home Page
+<img width="1444" height="666" alt="image" src="https://github.com/user-attachments/assets/0117d24f-2723-42f3-9897-ab389ccd7c0e" />
 
 (Add screenshot here)
 
