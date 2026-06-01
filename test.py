@@ -219,18 +219,23 @@ def decide_mood(analysis):
     return EMOTION_TO_MOOD.get(analysis["emotion"], "neutral")
 
 
-last_shown = {}
+# Per-mood queue of not-yet-shown songs, so refreshes cycle through the whole
+# list before any song repeats.
+_queues = {}
 
 
 def recommend(mood, limit=5):
-    songs = list(SONGS.get(mood, SONGS["neutral"]))
-    random.shuffle(songs)
-    result = songs[:limit]
-    if len(songs) > 1:
-        while result == last_shown.get(mood):
-            random.shuffle(songs)
-            result = songs[:limit]
-    last_shown[mood] = result
+    pool = list(SONGS.get(mood, SONGS["neutral"]))
+    limit = min(limit, len(pool))
+    queue = _queues.get(mood) or []
+    # Refill with songs not already queued (avoids duplicates within a batch and
+    # repeats across consecutive refreshes) until the pool is exhausted.
+    if len(queue) < limit:
+        fresh = [s for s in pool if s not in queue]
+        random.shuffle(fresh)
+        queue = queue + fresh
+    result = queue[:limit]
+    _queues[mood] = queue[limit:]
     return result
 
 

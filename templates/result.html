@@ -1,0 +1,32 @@
+<div class="result">
+  <div class="mood-banner">You're feeling %%MOOD%%</div>
+  <div class="meta">Sentiment: %%SENTIMENT%% &nbsp;·&nbsp; Emotion: %%EMOTION%%</div>
+  <div class="player-layout">
+    <div class="cd-side">
+      <div class="cd" id="cd">
+        <div class="screen" id="screen">
+          <div class="art">
+            <div class="ph">No song<br>playing</div>
+            <img id="albumArt" alt="">
+          </div>
+        </div>
+        <div class="wheel">
+          <span class="lbl menu">MENU</span>
+          <span class="lbl prev">&#9198;</span>
+          <span class="lbl next">&#9197;</span>
+          <span class="lbl play">&#9199;</span>
+          <div class="center"></div>
+        </div>
+      </div>
+      <div class="now-playing" id="nowPlaying"></div>
+      <div class="eq" id="eq"><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="controls">
+        <button type="button" class="play-btn" id="pauseBtn" aria-label="Pause" disabled>
+          <span class="ico-pause"></span><span class="ico-play"></span>
+        </button>
+        <button type="button" class="stop-btn" id="stopBtn" aria-label="Stop"></button>
+      </div>
+    </div>
+    <div class="song-list">%%SONGS%%</div>
+  </div>
+</div>
