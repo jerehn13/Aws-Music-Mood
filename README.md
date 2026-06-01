@@ -104,7 +104,8 @@ Deployment Steps:
 
 
 ### Recommendation Results
-<img width="723" height="481" alt="image" src="https://github.com/user-attachments/assets/e40b2590-ec55-4e53-ae9f-d8a88139810c" />
+<img width="739" height="452" alt="image" src="https://github.com/user-attachments/assets/cb66da06-3fb3-4d62-8261-16a38ca14b00" />
+
 
 
 ### AWS Deployment
