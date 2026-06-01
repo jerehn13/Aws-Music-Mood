@@ -123,6 +123,28 @@ PAGE = """<!DOCTYPE html>
     .stop-btn:hover {{ background: #c52f2f; }}
     button:active, .stop-btn:active {{ transform: scale(0.95); }}
 
+    .controls {{ display: flex; gap: 10px; align-items: center; }}
+    .play-btn {{
+      margin-top: 14px; width: 48px; height: 48px; border-radius: 10px;
+      background: #2b3149; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.08s, background 0.15s;
+    }}
+    .play-btn:hover {{ background: #3a4163; }}
+    .play-btn:disabled {{ opacity: 0.4; cursor: default; }}
+    .play-btn:active {{ transform: scale(0.95); }}
+    .play-btn .ico-pause {{ display: flex; gap: 5px; }}
+    .play-btn .ico-pause::before, .play-btn .ico-pause::after {{
+      content: ""; width: 5px; height: 16px; background: #fff; border-radius: 2px;
+    }}
+    .play-btn .ico-play {{
+      display: none; width: 0; height: 0; margin-left: 3px;
+      border-left: 15px solid #fff;
+      border-top: 9px solid transparent; border-bottom: 9px solid transparent;
+    }}
+    .play-btn.is-paused .ico-pause {{ display: none; }}
+    .play-btn.is-paused .ico-play {{ display: block; }}
+
     @keyframes pop {{
       0% {{ transform: scale(1); }}
       40% {{ transform: scale(1.025); }}
@@ -171,6 +193,11 @@ PAGE = """<!DOCTYPE html>
     var stopTimer = null;
     var activeOscs = [];
     var jsonpId = 0;
+    // Playback state for pause/resume.
+    var mode = null;            // 'preview' (iTunes audio) | 'fallback' (synth) | null
+    var isPaused = false;
+    var fallbackRemaining = 0;  // ms of synth sample left when paused
+    var fallbackTimerStart = 0; // wall-clock ms the current fallback timer started
     var BEAT = 0.42;
     var SAMPLE_LENGTH = 20;
     var STEPS = {{ 'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11 }};
@@ -230,6 +257,7 @@ PAGE = """<!DOCTYPE html>
     function playMelody(melody) {{
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       var ctx = audioCtx;
+      if (ctx.state === 'suspended') ctx.resume();
       stopAll();
 
       // Warm low-pass filter so it sounds mellow and acoustic, not harsh.
@@ -271,12 +299,66 @@ PAGE = """<!DOCTYPE html>
       if (eq) eq.classList.toggle('on', on);
     }}
 
+    // Reflect the current state on the pause/resume button.
+    function updatePauseBtn() {{
+      var btn = document.getElementById('pauseBtn');
+      if (!btn) return;
+      btn.disabled = (mode === null);
+      btn.classList.toggle('is-paused', isPaused);
+      btn.setAttribute('aria-label', isPaused ? 'Resume' : 'Pause');
+    }}
+
     function stopEverything() {{
       stopAll();
       var player = document.getElementById('player');
       if (player) {{ player.pause(); }}
-      if (stopTimer) clearTimeout(stopTimer);
+      if (stopTimer) {{ clearTimeout(stopTimer); stopTimer = null; }}
+      mode = null;
+      isPaused = false;
       setPlaying(false);
+      updatePauseBtn();
+    }}
+
+    // (Re)start the timer that switches the synth visuals off when the sample ends.
+    function startFallbackTimer(ms) {{
+      if (stopTimer) clearTimeout(stopTimer);
+      fallbackTimerStart = Date.now();
+      stopTimer = setTimeout(function () {{
+        mode = null;
+        isPaused = false;
+        setPlaying(false);
+        updatePauseBtn();
+      }}, ms);
+    }}
+
+    // Pause or resume whatever is currently playing (preview audio or synth).
+    function togglePause() {{
+      if (mode === null) return;
+      var player = document.getElementById('player');
+      if (!isPaused) {{
+        isPaused = true;
+        if (mode === 'preview') {{
+          if (player) player.pause();
+        }} else {{
+          if (audioCtx && audioCtx.state === 'running') audioCtx.suspend();
+          if (stopTimer) {{
+            clearTimeout(stopTimer);
+            stopTimer = null;
+            fallbackRemaining -= (Date.now() - fallbackTimerStart);
+          }}
+        }}
+        setPlaying(false);
+      }} else {{
+        isPaused = false;
+        if (mode === 'preview') {{
+          if (player) player.play();
+        }} else {{
+          if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+          startFallbackTimer(Math.max(0, fallbackRemaining));
+        }}
+        setPlaying(true);
+      }}
+      updatePauseBtn();
     }}
 
     // Look up the song on the iTunes Search API (JSONP) for an official preview.
@@ -336,8 +418,11 @@ PAGE = """<!DOCTYPE html>
     function playFallback(melody) {{
       var duration = playMelody(melody);
       setPlaying(true);
-      if (stopTimer) clearTimeout(stopTimer);
-      stopTimer = setTimeout(function () {{ setPlaying(false); }}, duration * 1000);
+      mode = 'fallback';
+      isPaused = false;
+      fallbackRemaining = duration * 1000;
+      startFallbackTimer(fallbackRemaining);
+      updatePauseBtn();
     }}
 
     document.querySelectorAll('.song').forEach(function (el) {{
@@ -385,8 +470,16 @@ PAGE = """<!DOCTYPE html>
             var p = player.play();
             if (p && p.catch) p.catch(function () {{ playFallback(melody); }});
             setPlaying(true);
+            mode = 'preview';
+            isPaused = false;
+            updatePauseBtn();
             showNow('Now Playing: ' + title + ' - ' + artist);
-            player.onended = function () {{ setPlaying(false); }};
+            player.onended = function () {{
+              mode = null;
+              isPaused = false;
+              setPlaying(false);
+              updatePauseBtn();
+            }};
           }} else {{
             showNow('Sample (no preview found): ' + title + ' - ' + artist);
             playFallback(melody);
@@ -394,6 +487,11 @@ PAGE = """<!DOCTYPE html>
         }});
       }});
     }});
+
+    var pauseBtn = document.getElementById('pauseBtn');
+    if (pauseBtn) {{
+      pauseBtn.addEventListener('click', togglePause);
+    }}
 
     var stopBtn = document.getElementById('stopBtn');
     if (stopBtn) {{
@@ -423,8 +521,13 @@ RESULT = """<div class="result">
       </div>
       <div class="now-playing" id="nowPlaying"></div>
       <div class="eq" id="eq"><span></span><span></span><span></span><span></span><span></span></div>
-      <button type="button" class="stop-btn" id="stopBtn" aria-label="Stop"></button>
-      <div class="hint">Click a song to play a sample</div>
+      <div class="controls">
+        <button type="button" class="play-btn" id="pauseBtn" aria-label="Pause" disabled>
+          <span class="ico-pause"></span><span class="ico-play"></span>
+        </button>
+        <button type="button" class="stop-btn" id="stopBtn" aria-label="Stop"></button>
+      </div>
+      <div class="hint">Click a song, then pause/resume or stop</div>
     </div>
     <div class="song-list">{songs}</div>
   </div>
